@@ -2,7 +2,6 @@ import { Postagem } from './../entities/postagem.entity';
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { DeleteResult, ILike, Repository } from "typeorm";
-import { postagemDTO } from '../postagem.dto';
 
 @Injectable()
 export class PostagemService {
@@ -11,11 +10,11 @@ export class PostagemService {
         private postagemRepository: Repository<Postagem>) { }
 
     async findAll(): Promise<Postagem[]> {
-        return await this.postagemRepository.find();
+        return await this.postagemRepository.find({ relations: { tema: true } });
     }
 
     async findById(id: number): Promise<Postagem> {
-        let findedPost = await this.postagemRepository.findOneBy({ id })
+        let findedPost = await this.postagemRepository.findOne({ where: { id }, relations: { tema: true } })
 
         if (!findedPost) throw new HttpException("Post not found", HttpStatus.NOT_FOUND);
 
@@ -23,14 +22,14 @@ export class PostagemService {
     }
 
     async findByTitle(title: string): Promise<Postagem[]> {
-        return this.postagemRepository.find({ where: { titulo: ILike(`%${title}%`) } })
+        return this.postagemRepository.find({ where: { titulo: ILike(`%${title}%`) }, relations: { tema: true } })
     }
 
-    async findByDescription(text: string): Promise<Postagem[]>{
-        return this.postagemRepository.find({where: {text: ILike(`%${text}%`)}})
+    async findByDescription(text: string): Promise<Postagem[]> {
+        return this.postagemRepository.find({ where: { text: ILike(`%${text}%`) }, relations: { tema: true } })
     }
 
-    async create(postagem: postagemDTO): Promise<Postagem> {
+    async create(postagem: Postagem): Promise<Postagem> {
         return await this.postagemRepository.save(postagem)
     }
 
@@ -47,7 +46,7 @@ export class PostagemService {
     async delete(id: number): Promise<DeleteResult> {
         let findedPost = await this.findById(id);
 
-        if (!findedPost){
+        if (!findedPost) {
             throw new HttpException("Post not found", HttpStatus.NOT_FOUND);
         }
 
