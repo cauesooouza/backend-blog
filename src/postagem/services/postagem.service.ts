@@ -10,11 +10,11 @@ export class PostagemService {
         private postagemRepository: Repository<Postagem>) { }
 
     async findAll(): Promise<Postagem[]> {
-        return await this.postagemRepository.find({ relations: { tema: true } });
+        return await this.postagemRepository.find({ relations: { tema: true, usuario: true } });
     }
 
     async findById(id: number): Promise<Postagem> {
-        let findedPost = await this.postagemRepository.findOne({ where: { id }, relations: { tema: true } })
+        let findedPost = await this.postagemRepository.findOne({ where: { id }, relations: { tema: true, usuario: true } })
 
         if (!findedPost) throw new HttpException("Post not found", HttpStatus.NOT_FOUND);
 
@@ -22,11 +22,11 @@ export class PostagemService {
     }
 
     async findByTitle(title: string): Promise<Postagem[]> {
-        return this.postagemRepository.find({ where: { titulo: ILike(`%${title}%`) }, relations: { tema: true } })
+        return this.postagemRepository.find({ where: { titulo: ILike(`%${title}%`) }, relations: { tema: true, usuario: true } })
     }
 
     async findByDescription(text: string): Promise<Postagem[]> {
-        return this.postagemRepository.find({ where: { text: ILike(`%${text}%`) }, relations: { tema: true } })
+        return this.postagemRepository.find({ where: { text: ILike(`%${text}%`) }, relations: { tema: true, usuario: true } })
     }
 
     async create(postagem: Postagem): Promise<Postagem> {
