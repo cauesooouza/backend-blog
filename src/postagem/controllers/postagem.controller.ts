@@ -6,8 +6,6 @@ import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Postagem')
-@ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
 @Controller("/posts")
 export class PostagemController {
     constructor(private readonly postagemService: PostagemService) { }
@@ -36,18 +34,24 @@ export class PostagemController {
         return this.postagemService.findByDescription(description);
     }
 
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     @Post()
     @HttpCode(HttpStatus.CREATED)
     createPost(@Body() postagem: Postagem): Promise<Postagem> {
         return this.postagemService.create(postagem)
     }
 
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     @Put()
     @HttpCode(HttpStatus.CREATED)
     updatePost(@Body() postagem: Postagem): Promise<Postagem> {
         return this.postagemService.update(postagem);
     }
 
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
     deletePost(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {

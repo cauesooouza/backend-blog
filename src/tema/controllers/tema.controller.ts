@@ -6,8 +6,6 @@ import { JwtAuthGuard } from '../../auth/guard/jwt-auth.guard';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Tema')
-@ApiBearerAuth()
-@UseGuards(JwtAuthGuard)
 @Controller("/tema")
 export class TemaController {
     constructor(private readonly temaService: TemaService) { }
@@ -30,18 +28,24 @@ export class TemaController {
         return this.temaService.findByDescription(description);
     }
 
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     @Post()
     @HttpCode(HttpStatus.CREATED)
     createPost(@Body() tema: Tema): Promise<Tema> {
         return this.temaService.create(tema)
     }
 
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     @Put()
     @HttpCode(HttpStatus.CREATED)
     updatePost(@Body() tema: Tema): Promise<Tema> {
         return this.temaService.update(tema);
     }
 
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
     deletePost(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
