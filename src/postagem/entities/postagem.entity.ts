@@ -26,6 +26,10 @@ export class Postagem {
     date: Date;
 
     @ApiProperty()
+    @Column({length: 5000 }) 
+    foto: string
+
+    @ApiProperty()
     @ManyToOne(() => Tema, (tema) => tema.postagem, {
         onDelete: "CASCADE"
     })
