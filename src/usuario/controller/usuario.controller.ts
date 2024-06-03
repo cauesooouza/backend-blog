@@ -1,8 +1,9 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, UseGuards } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Put, UseGuards } from "@nestjs/common";
 import { UsuarioService } from "../services/usuario.service";
 import { Usuario } from "../entities/usuario.entity";
 import { JwtAuthGuard } from "../../auth/guard/jwt-auth.guard";
 import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { DeleteResult } from "typeorm";
 
 @ApiTags('Usuario')
 @Controller("/usuarios")
@@ -40,4 +41,11 @@ export class UsuarioController {
         return this.usuarioService.update(usuario)
     }
 
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard)
+    @Delete('/:id')
+    @HttpCode(HttpStatus.OK)
+    async delete(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
+        return this.usuarioService.delete(id)
+    }
 }

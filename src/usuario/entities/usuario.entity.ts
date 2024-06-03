@@ -6,7 +6,6 @@ import { ApiProperty } from "@nestjs/swagger"
 @Entity({name: "tb_usuarios"})
 export class Usuario {
 
-    @ApiProperty()
     @PrimaryGeneratedColumn() 
     public id: number
 
@@ -31,7 +30,6 @@ export class Usuario {
     @Column({length: 5000 }) 
     public foto: string
 
-    @ApiProperty()
     @OneToMany(() => Postagem, (postagem) => postagem.usuario)
     postagem: Postagem[]
 
