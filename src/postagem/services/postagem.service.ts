@@ -44,7 +44,7 @@ export class PostagemService {
     }
 
     async delete(id: number): Promise<DeleteResult> {
-        let findedPost = await this.findById(id);
+        let findedPost = await this.postagemRepository.findOne({ where: { id } })
 
         if (!findedPost) {
             throw new HttpException("Post not found", HttpStatus.NOT_FOUND);
