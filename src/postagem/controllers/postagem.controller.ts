@@ -52,7 +52,7 @@ export class PostagemController {
 
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard)
-    @Delete(':id')
+    @Delete('/:id')
     @HttpCode(HttpStatus.NO_CONTENT)
     deletePost(@Param('id', ParseIntPipe) id: number): Promise<DeleteResult> {
         return this.postagemService.delete(id);
